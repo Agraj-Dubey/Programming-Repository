@@ -1,0 +1,249 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+  scroll-snap-type: proximity;
+}
+.wrapper {
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  font-family: "Tilt Neon";
+  letter-spacing: .1rem;
+}
+#page-1 {
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(
+    60deg,
+    hotpink,
+    rgb(0, 183, 255),
+    purple 10%,
+    steelblue
+  );
+  backdrop-filter: blur(.1rem);
+  background-size: 300% 300%;
+  animation: back 11s ease-in-out 0.1s infinite alternate-reverse;
+}
+@keyframes back {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}
+
+.box1 {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-start;
+  align-content: space-around;
+  
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  height: 80vh;
+  width: 92vw;
+}
+.box1 img {
+  position: absolute;
+  left: 1rem;
+  bottom: 6rem;
+  border-radius: 51%;
+  width: 46vw;
+  height: 67vh;
+  transition: 3s linear .2s;
+  cursor: pointer;
+}
+
+.box1 img:hover{
+  scale: .1;
+  rotate: 360deg ;
+  opacity: 0;
+
+}
+.box1 span {
+  display: inline-block;
+  font-size: 11rem;
+  position: absolute;
+  top: 18rem;
+  left: 17rem;
+  z-index: -1;
+  
+}
+#navbar li img{
+  margin-bottom: 0;
+  height: 6vh;
+  display: inline-block;
+  padding: 0.3rem;
+  transition: .2s linear 0s;
+  cursor: pointer;
+  animation: wobble .5s linear .1s infinite alternate;
+}
+@keyframes wobble {
+0%{
+  rotate: 0deg;
+ 
+}
+50%{
+rotate: 10deg;
+}
+100%{
+rotate: -10deg;
+}
+}
+#navbar li img:hover{
+  filter: invert(1);
+}
+#right a img:hover{
+  filter: invert(1);
+}
+#p {
+  font-family: "comfortaa";
+  font-size: 1.9rem;
+  position: absolute;
+  bottom: 28rem;
+  right: -2rem;
+  cursor: pointer;
+  height: 33vh;
+  width: 40vw;
+  padding: 2rem;
+  letter-spacing: 0.1rem;
+  line-height: 4rem;
+  text-align: center;
+}
+#p h1 {
+  line-height: 6rem;
+  font-family: "dancing script";
+  color: rgb(255, 255, 255);
+  text-shadow: 0 0 1rem white, 0 0 1rem skyblue, 0 0 1rem rgb(255, 255, 255);
+}
+#page-2 {
+  height: 100vh;
+  width: 100vw;
+  background-color: color-mix(
+    in srgb,
+    rgb(80, 80, 208) 50%,
+    rgb(33, 114, 127) 50%
+  );
+}
+#page-3 {
+  height: 100vh;
+  width: 100vw;
+  background-color: color-mix(
+    in srgb,
+    rgb(0, 224, 245) 50%,
+    rgb(209, 30, 30) 50%
+  );
+}
+#page-4 {
+  height: 100vh;
+  width: 100vw;
+  background-color: color-mix(
+    in srgb,
+    rgb(11, 255, 3) 50%,
+    rgb(172, 12, 230) 50%
+  );
+}
+header {
+  position: fixed;
+  top: 0rem;
+  left: 0;
+  height: 1vh;
+  width: 101vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-flow: row wrap;
+  z-index: 222;
+  
+}
+
+#logo img {
+  position: absolute;
+  top: 0rem;
+  left: 1.99rem;
+  border-radius: 100%;
+  cursor: pointer;
+}
+img {
+  cursor: pointer;
+  padding: 0.1rem;
+  margin-bottom: 1rem;
+}
+#navbar {
+  position: relative;
+  left: -0.9rem;
+  top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  width: 60vw;
+  flex-flow: row wrap;
+  
+  align-content: flex-end;
+  align-items: flex-start;
+}
+#navbar ul {
+  display: flex;
+  overflow: auto;
+  cursor: pointer;
+}
+#navbar li {
+  display: flex;
+  justify-content: space-around;
+  flex-flow: column wrap;
+  list-style: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+#navbar li a {
+  cursor: pointer;
+  margin: 0.2rem;
+  margin-left: 3rem;
+  height: 11vh;
+  width: 10vw;
+  display: flex;
+  flex-flow: column wrap;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 1.2rem;
+}
+#right {
+  display: flex;
+  flex-flow: row wrap;
+  
+}
+.contact {
+  display: flex;
+  flex-flow: column wrap;
+  cursor: pointer;
+}
+
+.meow a {
+  position: relative;
+  right: 4rem;
+  
+  bottom:-1rem;
+  display: flex;
+  padding: 0.3rem;
+  text-decoration: none;
+  color: white;
+  font-size: 1.3rem;
+  margin: 0.4rem;
+  margin-left: 2rem;
+  flex-flow: column-reverse wrap;
+  cursor: pointer;
+  
+}
+.meow a img{
+  margin-bottom: 0;
+  transition: .2s linear 0s;
+}

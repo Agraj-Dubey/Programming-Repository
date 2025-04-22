@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agraj Dubey - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lato:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;700&family=Nunito:wght@400;700&family=Fuzzy+Bubbles:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind Custom Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-purple': '#9272CE',
+                        'brand-dark': '#000000',
+                        'brand-light': '#FFFFFF',
+                        'brand-gray': '#E0E0E0',
+                        'brand-text': '#B0B0B0',
+                        'brand-hover': '#AE8BD5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        lato: ['Lato', 'sans-serif'],
+                        outfit: ['Outfit', 'sans-serif'],
+                        nunito: ['Nunito', 'sans-serif'],
+                        'fuzzy-bubbles': ['Fuzzy Bubbles', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+     <style>
+        /* --- Animated Gradient Background --- */
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body {
+            font-family: theme('fontFamily.sans');
+            color: theme('colors.brand-gray'); /* Keep text color using theme */
+            overflow-x: hidden;
+
+            /* --- New Animated Gradient Background --- */
+            /* Using darker, richer blues and purples */
+            background: linear-gradient(60deg, #0a0a1a, #1a0a2a, #0a1a2a, #110e18);
+            /* Angle changed slightly to 60deg */
+            /* Colors: Very Dark Blue -> Deep Purple -> Deep Tealish Blue -> Dark Gray/Purple */
+
+            background-size: 350% 350%; /* Slightly smaller size can make movement feel faster */
+            animation: gradientAnimation 15s ease infinite; /* Faster animation (15s) */
+        }
+
+        /* Make sure NO other background or background-color rules are applied to the body */
+        .quote-style {
+            font-family: theme('fontFamily.outfit');
+            /* ... rest of quote-style */
+        }
+        /* ... rest of your existing styles ... */
+        .quote-style {
+            font-family: theme('fontFamily.outfit');
+            font-style: italic;
+            border-left: 4px solid theme('colors.brand-purple');
+            padding-left: 1.5rem;
+            color: theme('colors.brand-text');
+        }
+        nav a { transition: color 0.3s ease-in-out; } /* Smoother nav transition */
+        nav a:hover, nav a.active { color: theme('colors.brand-purple'); }
+        .high-contrast-text { color: theme('colors.brand-light'); }
+        .medium-contrast-text { color: theme('colors.brand-gray'); }
+        .lower-contrast-text { color: theme('colors.brand-text'); }
+        .post-preview p { color: theme('colors.brand-gray'); }
+
+        /* Card hover base style */
+        .writing-card {
+             transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .writing-card:hover {
+            transform: translateY(-5px);
+             box-shadow: 0 10px 20px rgba(146, 114, 206, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle purple glow shadow */
+        }
+         /* Button hover style */
+        .cta-button {
+             transition: background-color 0.3s ease-out, transform 0.2s ease-out;
+        }
+        .cta-button:hover {
+             transform: scale(1.03);
+        }
+
+        @layer utilities {
+          .line-clamp-3 {
+            overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3;
+          }
+           .line-clamp-4 { /* For writings page */
+            overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4;
+          }
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-brand-gray leading-relaxed antialiased"> <!-- Added antialiased -->
+
+    <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50 shadow-lg"> <!-- Increased shadow -->
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-brand-light hover:text-brand-purple transition-colors duration-300 font-outfit"> <!-- Added font -->
+                Agraj Dubey
+            </a>
+            <div class="space-x-6 text-brand-light">
+                <a href="https://www.blogger.com/profile/06675668817383737660" target="_blank" rel="noopener noreferrer" class="hover:text-brand-purple">About Me</a>
+                <a href="https://www.reddit.com/user/Federal_Anywhere_559/" target="_blank" rel="noopener noreferrer" class="hover:text-brand-purple">Contact Me</a>
+                <a href="writings.html" class="hover:text-brand-purple">Writings</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 md:py-20"> <!-- Responsive padding -->
+        <section class="text-center mb-20 md:mb-24">
+            <h1 class="text-5xl md:text-6xl font-bold high-contrast-text mb-4 font-outfit">Agraj Dubey</h1>
+            <p class="text-xl md:text-2xl medium-contrast-text mb-10">Cause no one listens, so I write instead😎</p>
+            <blockquote class="quote-style max-w-3xl mx-auto text-lg md:text-xl lower-contrast-text bg-gray-900/50 p-6 rounded-lg shadow-lg border-l-4 border-brand-purple"> <!-- Enhanced quote bg/border -->
+                "If determinism holds, there’s a chance I exit early—something dramatic, maybe even poetic. So I leave fragments of myself here—so at least the algorithm remembers me better than my family will"
+            </blockquote>
+        </section>
+
+        <section class="mb-16 md:mb-20">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-brand-purple mb-12 font-outfit">Recent Writings</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="writing-card bg-gray-800/70 p-6 rounded-lg shadow-md flex flex-col"> <!-- Added writing-card class -->
+                    <h3 class="text-xl font-semibold high-contrast-text mb-3 font-outfit">So, you want to travel back</h3>
+                    <div class="post-preview flex-grow mb-4">
+                        <p class="medium-contrast-text line-clamp-3 text-sm leading-relaxed">"So, you want to travel back, for you could not contain, could not refrain, that boundless hunger deep within, For all the changes you could pinch..."</p>
+                    </div>
+                    <a href="writings.html#post-2137542659647715265" class="text-brand-purple hover:text-brand-hover font-medium self-start mt-auto pt-2 text-sm">Read More →</a> <!-- Added mt-auto, pt-2 -->
+                </div>
+                <!-- Card 2 -->
+                <div class="writing-card bg-gray-800/70 p-6 rounded-lg shadow-md flex flex-col">
+                    <h3 class="text-xl font-semibold high-contrast-text mb-3 font-outfit">The Cost of Belonging</h3>
+                     <div class="post-preview flex-grow mb-4">
+                        <p class="medium-contrast-text line-clamp-3 text-sm leading-relaxed">Was I born different? What did I do different that made me the way I am? These are some of the questions that rebels like myself ask themselves at some point in life...</p>
+                    </div>
+                    <a href="writings.html#post-3486396209614590705" class="text-brand-purple hover:text-brand-hover font-medium self-start mt-auto pt-2 text-sm">Read More →</a>
+                </div>
+                 <!-- Card 3 -->
+                 <div class="writing-card bg-gray-800/70 p-6 rounded-lg shadow-md flex flex-col">
+                    <h3 class="text-xl font-semibold high-contrast-text mb-3 font-outfit">[POST] A New Chapter</h3>
+                     <div class="post-preview flex-grow mb-4">
+                        <p class="medium-contrast-text line-clamp-3 text-sm leading-relaxed">It's been so long that we have written anything and so much has happened and I don't mean to provide like a storytelling effect or something but really so much has happened...</p>
+                    </div>
+                    <a href="writings.html#post-8246180062320707624" class="text-brand-purple hover:text-brand-hover font-medium self-start mt-auto pt-2 text-sm">Read More →</a>
+                </div>
+            </div>
+             <div class="text-center mt-12">
+                <a href="writings.html" class="cta-button bg-brand-purple text-brand-light font-semibold py-3 px-8 rounded-lg hover:bg-brand-hover shadow-lg hover:shadow-md inline-block"> <!-- Added inline-block, cta-button class -->
+                    View All Writings
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+<footer>
+    <!-- Ensure this <p> has text-brand-gray -->
+    <p class="text-brand-gray text-sm">© <span id="year"></span> Agraj Dubey. All rights reserved.</p>
+</footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writings - Agraj Dubey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lato:ital,wght@0,400;0,700;1,400&family=Outfit:wght@400;500;700&family=Nunito:wght@400;700&family=Fuzzy+Bubbles:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        // Tailwind Config
+        tailwind.config = { theme: { extend: {
+            colors: {
+                'brand-purple': '#9272CE',
+                'brand-hover': '#AE8BD5',
+                'brand-light-purple': '#CBB8E8',
+                'brand-dark': '#000000',
+                'brand-light': '#FFFFFF',
+                'brand-gray': '#D1D1D1', // Slightly dimmed main text
+                'brand-text': '#A8A8A8', // Slightly dimmed secondary text
+                'article-bg': 'rgba(20, 20, 22, 0.88)', // Slightly more opaque
+                'card-bg': 'rgba(30, 30, 30, 0.85)', // Slightly more opaque
+                'dark-purple-bg': '#1a0a2e',
+                'darker-bg': '#050505',
+                'hover-highlight': 'rgba(146, 114, 206, 0.1)',
+                'card-hover-bg': 'rgba(45, 35, 60, 0.9)', // Slightly more opaque hover
+                'body-overlay': 'rgba(5, 5, 8, 0.82)' // Increased overlay opacity
+            },
+            fontFamily: { sans: ['Inter', 'sans-serif'], lato: ['Lato', 'sans-serif'], outfit: ['Outfit', 'sans-serif'], nunito: ['Nunito', 'sans-serif'], 'fuzzy-bubbles': ['Fuzzy Bubbles', 'cursive'], verdana: ['Verdana', 'sans-serif'], 'trebuchet': ['Trebuchet MS', 'sans-serif'] }
+        } } }
+    </script>
+     <style>
+         /* --- Keyframes --- */
+         @keyframes background-pan { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+         @keyframes fade-in { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+         /* Slightly toned down hover glow */
+         @keyframes card-glow { 0% { box-shadow: 0 0 7px 1px rgba(146, 114, 206, 0.18), 0 5px 15px rgba(0,0,0, 0.3); border-color: rgba(174, 139, 213, 0.25); } 50% { box-shadow: 0 0 22px 5px rgba(146, 114, 206, 0.35), 0 8px 25px rgba(0, 0, 0, 0.25); border-color: rgba(174, 139, 213, 0.6); } 100% { box-shadow: 0 0 7px 1px rgba(146, 114, 206, 0.18), 0 5px 15px rgba(0,0,0, 0.3); border-color: rgba(174, 139, 213, 0.25); } }
+         /* Slightly toned down base pulse */
+         @keyframes card-subtle-pulse {
+             0% { box-shadow: 0 5px 15px rgba(0,0,0, 0.3), 0 0 4px 0px rgba(146, 114, 206, 0.12); }
+             50% { box-shadow: 0 5px 18px rgba(0,0,0, 0.35), 0 0 10px 1px rgba(146, 114, 206, 0.2); }
+             100% { box-shadow: 0 5px 15px rgba(0,0,0, 0.3), 0 0 4px 0px rgba(146, 114, 206, 0.12); }
+         }
+         @keyframes slide-down-fade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+         /* Animation for Active Nav Link */
+         @keyframes nav-active-pulse {
+             0% { color: theme('colors.brand-purple'); }
+             50% { color: theme('colors.brand-hover'); }
+             100% { color: theme('colors.brand-purple'); }
+         }
+
+
+        /* --- Base & Body --- */
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: theme('fontFamily.sans'); color: theme('colors.brand-gray'); overflow-x: hidden;
+            font-size: 17px;
+            position: relative; z-index: 0;
+            background-color: theme('colors.darker-bg'); /* Fallback */
+        }
+        /* Blurred Background Image Pseudo-Element */
+        body::before {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -2;
+            background-image: url('mountains.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat;
+            filter: blur(60px) brightness(0.55); /* Increased blur, slightly darker */
+            -webkit-filter: blur(60px) brightness(0.65);
+            transform: scale(1.1); /* Increased scale to avoid edge artifacts */
+        }
+        /* Increased Overlay Opacity */
+        body::after {
+            content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: -1;
+            background-color: theme('colors.body-overlay');
+        }
+
+
+        /* --- Header & Nav --- */
+        .header-container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-toggle-btn { background: none; border: none; padding: 0.5rem; cursor: pointer; z-index: 60; }
+        .nav-toggle-btn svg { stroke: theme('colors.brand-light'); transition: stroke 0.3s ease; }
+        .nav-toggle-btn:hover svg { stroke: theme('colors.brand-purple'); }
+        .mobile-menu { display: none; position: absolute; top: 100%; left: 0; width: 100%; background-color: rgba(10, 10, 10, 0.92); backdrop-filter: blur(8px); padding: 1.5rem 0; box-shadow: 0 10px 20px rgba(0,0,0,0.4); z-index: 55; animation: slide-down-fade 0.4s ease-out forwards; }
+        .mobile-menu.is-open { display: block; }
+        .mobile-menu a { display: block; padding: 0.8rem 1.5rem; color: theme('colors.brand-light'); font-size: 1.1rem; transition: color 0.3s ease, background-color 0.3s ease; text-align: center; }
+        .mobile-menu a:hover { color: theme('colors.brand-purple'); background-color: rgba(146, 114, 206, 0.1); }
+        .mobile-menu a.active { background-color: rgba(146, 114, 206, 0.05); font-weight: 600; animation: nav-active-pulse 2.5s ease-in-out infinite; } /* Apply animation */
+        .desktop-nav a { transition: color 0.3s ease-in-out, transform 0.2s ease; display: inline-block; }
+        .desktop-nav a:hover { color: theme('colors.brand-purple'); transform: scale(1.08); }
+        .desktop-nav a.active { font-weight: 600; animation: nav-active-pulse 2.5s ease-in-out infinite; } /* Apply animation */
+
+        /* --- Text Hover Scale (Same as before) --- */
+        .text-hover-scale { transition: transform 0.25s ease-out; display: inline-block; }
+        .text-hover-scale:hover { transform: scale(1.05); }
+
+        /* --- Preview Card Styling & Animation --- */
+        .writing-preview-card {
+            background-color: theme('colors.card-bg'); backdrop-filter: blur(6px);
+            border-radius: 0.75rem; padding: 1.75rem;
+            border: 1px solid rgba(146, 114, 206, 0.2);
+            display: flex; flex-direction: column;
+            transition: transform 0.3s ease-out, box-shadow 0.4s ease-out, border-color 0.4s ease-out, background-color 0.3s ease;
+            animation: card-subtle-pulse 3s ease-in-out infinite; /* Slower base pulse */
+        }
+        .writing-preview-card:hover {
+            transform: translateY(-8px) scale(1.04);
+            background-color: theme('colors.card-hover-bg');
+            animation: card-glow 2s ease-in-out infinite alternate; /* Slower hover glow */
+        }
+        .writing-preview-card h3 { color: theme('colors.brand-light'); font-size: 1.4rem; font-weight: 600; margin-bottom: 0.5rem; font-family: theme('fontFamily.outfit'); }
+        /* Changed meta info color */
+        .writing-preview-card .post-meta-info { font-size: 0.85rem; color: theme('colors.brand-light-purple'); margin-bottom: 1rem; font-family: theme('fontFamily.lato'); opacity: 0.85; } /* Slightly less opacity */
+        .writing-preview-card .excerpt { color: theme('colors.brand-gray'); font-size: 1rem; line-height: 1.6; flex-grow: 1; margin-bottom: 1.25rem; }
+        /* Changed button color */
+        .writing-preview-card button.read-more-link { background: none; border: none; padding: 0; color: theme('colors.brand-purple'); font-weight: 500; text-decoration: none; align-self: flex-start; cursor: pointer; transition: color 0.3s ease; font-size: 1rem; margin-top: auto; }
+        .writing-preview-card button.read-more-link:hover { color: theme('colors.brand-hover'); text-decoration: underline; }
+
+        /* --- Full Article Styling & Animation --- */
+        #full-articles-container { display: none; margin-top: 2rem; }
+        #full-articles-container article {
+            display: none; background-color: theme('colors.article-bg'); backdrop-filter: blur(10px);
+            border-radius: 0.75rem; padding: 2.5rem 3rem; margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0, 0.6), inset 0 1px 3px rgba(146, 114, 206, 0.1);
+            border: 1px solid rgba(146, 114, 206, 0.3);
+            border-top: 5px solid theme('colors.brand-purple');
+            opacity: 0;
+            transition: opacity 0.6s ease-out, transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        /* Hover effect for full article */
+        #full-articles-container article:hover {
+            transform: scale(1.015);
+            box-shadow: 0 15px 50px rgba(0,0,0, 0.7), 0 0 25px rgba(146, 114, 206, 0.25);
+        }
+        #full-articles-container article.is-visible { display: block; opacity: 1; animation: fade-in 0.6s ease-out forwards; }
+        #full-articles-container h2 { color: theme('colors.brand-purple'); margin-bottom: 0.75rem; font-size: 2.2rem; font-weight: 700; font-family: theme('fontFamily.outfit'); line-height: 1.3; }
+        /* Changed meta info color */
+        #full-articles-container .post-meta-info { font-size: 0.95rem; color: theme('colors.brand-light-purple'); margin-bottom: 2.5rem; font-family: theme('fontFamily.lato'); opacity: 0.85; }
+        .back-button { display: inline-block; margin-top: 2.5rem; padding: 0.7rem 1.4rem; background-color: theme('colors.brand-purple'); color: theme('colors.brand-light'); border: none; border-radius: 0.5rem; font-weight: 500; cursor: pointer; transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; box-shadow: 0 3px 10px rgba(146, 114, 206, 0.2); font-size: 1rem; }
+        .back-button:hover { background-color: theme('colors.brand-hover'); transform: scale(1.06) translateY(-2px); box-shadow: 0 8px 20px rgba(146, 114, 206, 0.35); }
+
+        /* --- HR Separator --- */
+        hr.separator {
+            border: none; height: 2px;
+            background-image: linear-gradient(to right, transparent, theme('colors.brand-purple'), theme('colors.brand-hover'), theme('colors.brand-purple'), transparent);
+            margin-top: 4rem; margin-bottom: 4rem; opacity: 0.6; /* Slightly less opacity */
+        }
+
+        /* --- Blogger Content Styling --- */
+        .post-content-html p, .post-content-html blockquote, .post-content-html span, .post-content-html div, .post-content-html b, .post-content-html i, .post-content-html u, .post-content-html a { font-family: inherit; font-size: 1.1rem; line-height: 1.8; color: theme('colors.brand-gray'); background-color: transparent !important; text-align: left; margin: 0 0 1.4em 0; font-weight: normal; font-style: normal; text-decoration: none; word-wrap: break-word; border-radius: 3px; transition: background-color 0.25s ease-in-out, transform 0.2s ease-out; }
+        .post-content-html span { margin: 0; display: inline; }
+        .post-content-html p.text-hover-scale:hover, .post-content-html > div.text-hover-scale:hover, .post-content-html blockquote.text-hover-scale:hover { background-color: theme('colors.hover-highlight'); transform: scale(1.03); cursor: default; } /* Increased scale */
+        .post-content-html blockquote:has(blockquote:hover) { background-color: rgba(146, 114, 206, 0.03); transform: none; }
+        .post-content-html blockquote:has(blockquote blockquote:hover) { background-color: rgba(174, 139, 213, 0.03); transform: none; }
+        .post-content-html [style*="font-family: Outfit"] { font-family: theme('fontFamily.outfit'); } .post-content-html [style*="font-family: Nunito"] { font-family: theme('fontFamily.nunito'); } .post-content-html [style*="font-family: Fuzzy Bubbles"] { font-family: theme('fontFamily.fuzzy-bubbles'); } .post-content-html [style*="font-family: verdana"] { font-family: theme('fontFamily.verdana'); } .post-content-html [style*="font-family: trebuchet"] { font-family: theme('fontFamily.trebuchet'); }
+        .post-content-html b, .post-content-html [style*="font-weight: bold"] { font-weight: 700; } .post-content-html i, .post-content-html [style*="font-style: italic"] { font-style: italic; } .post-content-html u { text-decoration: underline; } .post-content-html a { color: theme('colors.brand-purple'); text-decoration: underline; transition: color 0.2s ease; display: inline; } .post-content-html a:hover { color: theme('colors.brand-hover'); }
+        .post-content-html p[style*="text-align: center;"], .post-content-html div[style*="text-align: center;"], .post-content-html blockquote[style*="text-align: center;"] { text-align: center; margin-left: auto; margin-right: auto; }
+        .post-content-html blockquote { border-left: 4px solid theme('colors.brand-purple'); padding: 0.75em 1.5rem; margin-left: 0; margin-right: 0; font-style: italic; color: theme('colors.brand-text'); background-color: rgba(146, 114, 206, 0.03); }
+        .post-content-html blockquote blockquote { margin-top: 1em; margin-left: 1.5rem; border-left-color: theme('colors.brand-hover'); padding-left: 1rem; background-color: rgba(174, 139, 213, 0.03); }
+        .post-content-html blockquote p { margin-bottom: 0.75em; }
+        .post-content-html img { max-width: 100%; height: auto; display: block; margin: 2.5rem auto; border-radius: 0.75rem; box-shadow: 0 6px 20px rgba(0,0,0,0.4); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .post-content-html img:hover { transform: scale(1.04); box-shadow: 0 10px 30px rgba(0,0,0,0.55); }
+        .post-content-html .separator { display: none; }
+
+        @layer utilities { .line-clamp-4 { overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; } }
+
+    </style>
+</head>
+<body class="bg-brand-dark text-brand-gray leading-relaxed antialiased">
+
+     <header class="bg-black/80 backdrop-blur-sm sticky top-0 z-50 shadow-xl">
+        <!-- Header Content -->
+        <div class="container mx-auto px-6 py-4 relative">
+            <div class="header-container">
+                <div class="flex items-center space-x-4"> <button id="nav-toggle" class="nav-toggle-btn md:hidden"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-7 h-7"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg> </button> <a href="index.html" class="text-2xl lg:text-3xl font-bold text-brand-light hover:text-brand-purple transition-colors duration-300 font-outfit"> Agraj Dubey </a> </div>
+                <div class="desktop-nav hidden md:flex space-x-7 text-brand-light items-center text-lg"> <a href="https://www.blogger.com/profile/06675668817383737660" target="_blank" rel="noopener noreferrer">About Me</a> <a href="https://www.reddit.com/user/Federal_Anywhere_559/" target="_blank" rel="noopener noreferrer">Contact Me</a> <a href="writings.html" class="active">Writings</a> </div>
+            </div>
+            <div id="mobile-menu" class="mobile-menu md:hidden"> <a href="https://www.blogger.com/profile/06675668817383737660" target="_blank" rel="noopener noreferrer">About Me</a> <a href="https://www.reddit.com/user/Federal_Anywhere_559/" target="_blank" rel="noopener noreferrer">Contact Me</a> <a href="writings.html" class="active">Writings</a> </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-16 md:py-20 min-h-screen">
+        <!-- Heading Removed -->
+
+        <!-- ==== Writings Preview Grid ==== -->
+        <section id="writings-grid-container" class="pt-6 md:pt-10 mb-20"> <!-- Added padding-top -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                 <!-- Cards Structure (Unchanged) -->
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">So, you want to travel back</h3> <div class="post-meta-info">April 19, 2025</div> <div class="excerpt line-clamp-4"> <p>"So, you want to travel back, for you could not contain, could not refrain, that boundless hunger deep within, For all the changes you could pinch..." Like a hawk that couldn’t be caged anymore...</p> </div> <button class="read-more-link" data-target-id="post-2137542659647715265">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">The Cost of Belonging</h3> <div class="post-meta-info">April 18, 2025</div> <div class="excerpt line-clamp-4"> <p>Was I born different? What did I do different that made me the way I am? These are some of the questions that rebels like myself ask themselves at some point in life, probably after realizing how fucked up the world really is...</p> </div> <button class="read-more-link" data-target-id="post-3486396209614590705">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POST] A New Chapter</h3> <div class="post-meta-info">February 14, 2025</div> <div class="excerpt line-clamp-4"> <p>It's been so long that we have written anything and so much has happened... I discovered myself, I discovered that I was an asexual... Sometimes I think I should start writing songs instead of writing poems. Maybe. We'll see...</p> </div> <button class="read-more-link" data-target-id="post-8246180062320707624">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POEM] Time Flies By</h3> <div class="post-meta-info">November 28, 2024</div> <div class="excerpt line-clamp-4"> <p>Time flies by / For me it does so in gloom / Worries of the future / Regrets of the past / Time flies by / With the tick of the clocks / An infinite race / With no finish line to cross...</p> </div> <button class="read-more-link" data-target-id="post-6388410560920980765">Read More →</button> </div>
+                  <div class="writing-preview-card"> <h3 class="text-hover-scale">[POST] Reading</h3> <div class="post-meta-info">November 16, 2024</div> <div class="excerpt line-clamp-4"> <p>I was thinking about the way I like to read , I read 3 different kinds of books at the same time. One book must be thought provoking... One book must be fictional... One book should be non fiction... Personally the one's I love the most are stories that teach something valuable...</p> </div> <button class="read-more-link" data-target-id="post-2406648289663441748">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POEM] The Lad I Use To Be -</h3> <div class="post-meta-info">November 10, 2024</div> <div class="excerpt line-clamp-4"> <p>"So glad I wrote it down / Of what became of me / Now I smile at what made me frown / Oh what a lad I used to be / In search for all these years / Of where my true self was lost..."</p> </div> <button class="read-more-link" data-target-id="post-7505116423602657742">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POEM] Winter Is Warm -</h3> <div class="post-meta-info">November 10, 2024</div> <div class="excerpt line-clamp-4"> <p>"The only season with so much warmth / Whispers of wind , a shiver so forth / Bringing us close , holding love and affection / Mornings so lazy , yet so cozy and full of perfection..."</p> </div> <button class="read-more-link" data-target-id="post-5851706812396763606">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POEM] Sinnloses leben (Meaning Worthless Life) -</h3> <div class="post-meta-info">November 10, 2024</div> <div class="excerpt line-clamp-4"> <p>"As a kid I used to dream / Of all things mighty and high / Of things way beyond my reach / To fly way above the sky / That I'd grew up to be the greatest alive / To conquer all that is hidden from sight..."</p> </div> <button class="read-more-link" data-target-id="post-2503258102193667996">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">[POEM] Fragmented Void -</h3> <div class="post-meta-info">November 10, 2024</div> <div class="excerpt line-clamp-4"> <p>"Would love to cry my heart out at the moment / But I can't / I can't do it without you / I am not strong enough to keep livin up / Without you / Lost / Just like I lost all my hope..."</p> </div> <button class="read-more-link" data-target-id="post-9063719817694048941">Read More →</button> </div>
+                 <div class="writing-preview-card"> <h3 class="text-hover-scale">THE FOUR BURNER THEORY -</h3> <div class="post-meta-info">November 4, 2020</div> <div class="excerpt line-clamp-4"> <p>FOUR BURNER THEORY: IMAGINE FOUR BURNERS WITH A LIMITED AMOUNT OF FUEL LEFT... HEALTH... WORK... FAMILY... SOCIAL... IF YOU WANT TO BE SUCCESSFUL THEN YOU HAVE TO CUT DOWN ANY ONE BURNER TOTALLY...</p> </div> <button class="read-more-link" data-target-id="post-5585996557335817138">Read More →</button> </div>
+            </div> <!-- End Grid -->
+        </section>
+        <!-- ==== End Writings Preview Grid ==== -->
+
+        <!-- Separator -->
+        <hr class="separator">
+
+        <!-- ==== Full Articles Section (Initially Hidden) ==== -->
+        <section id="full-articles-container">
+            <div class="full-articles-content max-w-4xl mx-auto">
+
+                <!-- Article 1: post-2137542659647715265 -->
+                <article id="post-2137542659647715265">
+                    <!-- Top back button removed -->
+                    <h2 class="text-hover-scale">So, you want to travel back</h2>
+                    <div class="post-meta-info">Published: April 19, 2025</div>
+                    <div class="post-content-html"> <p class="text-hover-scale" data-end="233" data-start="0" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">"So, you want to travel back,<br data-end="63" data-start="60"> for you could not contain,<br data-end="92" data-start="89"> could not refrain,<br data-end="113" data-is-only-node="" data-start="110"> that boundless hunger deep within,<br data-end="150" data-start="147"> For all the changes you could pinch,<br data-end="189" data-start="186"><br></span></span></p> <p class="text-hover-scale" data-end="471" data-start="235" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">So, you want to travel back,<br data-end="266" data-start="263"> to gain control that with time lost,<br data-end="305" data-start="302"> for all mistakes that bore a heavy cost,<br data-end="348" data-start="345"> reassure the freedom thereafter,<br data-end="383" data-is-only-node="" data-start="380"> stripping off all thy past disasters,<br data-end="423" data-start="420"><br></span></span></p> <p class="text-hover-scale" data-end="701" data-start="473" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">So, you want to travel back,<br data-end="504" data-start="501"> For all the changes you could etch,<br data-end="542" data-start="539"> for all harmony that would cling,<br data-end="578" data-start="575"> from Serenity you longed to fetch,<br data-end="615" data-is-only-node="" data-start="612"> from the compassion that you'd bring,<br data-end="655" data-start="652"><br></span></span></p> <p class="text-hover-scale" data-end="701" data-start="473" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">Like a hawk that couldn’t be caged anymore</span></span></p> <p class="text-hover-scale" data-end="701" data-start="473" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">Like tending a wound that couldn’t be restored</span></span></p> <p class="text-hover-scale" data-end="701" data-start="473" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">Like gazing at beauty that can’t be mirrored</span></span><span style="font-size: x-large;"><span style="font-family: Outfit;"> <br></span></span></p> <p class="text-hover-scale" data-end="701" data-start="473" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;"><br></span></span></p> <p class="text-hover-scale" data-end="921" data-start="703" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">And, So, you will travel back,<br data-end="736" data-start="733"> to arrive as peaceful as still marine water,<br data-end="783" data-start="780"> to garner stillness, that of a weaver,<br data-end="824" data-start="821"> whose final thread is laid,<br data-end="854" data-is-only-node="" data-start="851"> with all the glory and praises,<br data-end="888" data-start="885"> that reality relentlessly raises,</span></span></p> <p class="text-hover-scale" data-end="1077" data-start="923" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">So, you will travel back,<br data-end="951" data-start="948"> For the cosmic loom to set itself,<br data-end="988" data-start="985"> linear as it ever was,<br data-end="1013" data-start="1010"> for thy doomed fate to let itself,<br data-end="1050" data-is-only-node="" data-start="1047"> bound as tight as ever was,</span></span></p> <p class="text-hover-scale" data-end="1203" data-start="1079" style="text-align: center;"><span style="font-size: x-large;"><span style="font-family: Outfit;">So, you will travel back,<br data-end="1107" data-start="1104"> never truly to embrace,<br data-end="1133" data-start="1130"> to forever unknowingly interlace,<br data-end="1169" data-start="1166"> the desperate want to travel back"</span></span></p> </div>
+                    <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                <!-- Article 2: post-3486396209614590705 -->
+                 <article id="post-3486396209614590705">
+                    <!-- Removed top back button -->
+                    <h2 class="text-hover-scale">The Cost of Belonging</h2>
+                    <div class="post-meta-info">Published: April 18, 2025</div>
+                    <div class="post-content-html"> <p class="text-hover-scale PadderBetweenControlandBody" style="text-align: center;"><span style="font-size: 18pt;">Was I born different? <br> What did I do different that made me the way I am?</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">These are some of the questions that rebels like myself ask themselves at some point in life, probably after realizing how fucked up the world really is and how much control you really have, can’t put an age up at this, it’s different for everyone.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">This might just also be the time that we find ourselves a bit more depressed than usual and start looking out for those tiny moments of happiness since life isn’t playdough anymore. We might find ourselves having thoughts of travelling back through time to when things were simpler, when we were not as rebellious as we are right now.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Let’s define our terms, shall we? What do I mean by a ‘rebel’ and being ‘rebellious’?</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">See I like to believe that the world is divided into two kinds of people, the usual sheep-like ‘Conformists’ and the ever changing, fed up with the system, ‘Rebels’</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><b style=""><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Why Are We Raised to Obey, Not to Think?</span></b></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Why is it that as kids—and even as teens—we’re never really taught how to <i>think</i>? We're only taught how to <i>obey</i>. Respect your elders. Follow the rules. Conformity is the default setting, especially enforced by family and state. Parents are given a blank slate the moment we’re born. They can raise a rebel… or shape a command-obeying conformist.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">So, here’s the question:<br> <b>What’s right or wrong with either of these ideologies?</b><br> And the deeper one—<b>how long can someone truly stay in a conformist state before cracking?</b></span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">These questions unravel more beneath them. Which idea of liberation deserves more value? How much influence do parents really hold over the wiring of a child’s identity?</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Let’s address the first question. Anyone with a functioning brain, basic observational skills, and even a hint of logic <i>should</i> already know the answer—given the world we live in today.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Let me be blunt: I’m heavily biased. I’m a free soul. I despise authority of any kind. I believe a man of logic should follow reasoning, <i>not</i> orders. And no, this isn’t some utopian delusion. We don't live in an ideal world. Anyone who's grown out of their childhood innocence can <i>see</i> it. It doesn't stop with just your own country—look around, dig deeper. You'll arrive at the same conclusion:<br> <b>Everyone. Everywhere. Is messed up.</b></span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Society, globally, is broken. And here’s the part that stings: the majority of it is made up of <i>conformists</i>.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Look at Trump’s re-election. Look at a Chai-wala’s turned supreme leader riding the wave of blind devotion for over a decade. If that’s not enough to blame the downfall on mass conformity, I don’t know what is.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">And rebels?<br> What do a handful of rebels even achieve—except martyrdom?</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">History has Proof. Narendra Dabholkar. Gauri Lankesh. Journalists. Whistleblowers. Silenced. Gunned down. Forgotten. Most conformists don’t even <i>know</i> about their sacrifices.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Some days, I find myself genuinely believing that this world mostly comprises of and run by retards.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Is it really that hard to not get brainwashed?<br> To hold an objective thought before buying into something?<br> To question <i>anything</i> you encounter?</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Apparently, for most—it is.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">And that’s terrifying.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Another question we don’t ask enough:<br> <b>How much damage do cover-ups, lies, and secrecy cause when authorities mess up?</b><br> Maybe I’ll dig into that next time. But for now, let me say this:</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><i><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">Conformity</span></i><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">—as a global disease—should be viewed with the same suspicion we reserve for <i>communism</i> (or any ideology when taken to the extreme). The world would be better off without blind followers.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">And here comes the final—and maybe trickiest—question:<br> <b>How long can one stay a conformist? And how much of that is because of parenting?</b></span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">In my case, both my parents are conformists. The only rebellion they seem to show is <i>towards me</i>. They’ve never been the curious type. Never stirred trouble. Unless something extreme happens—or someone they care about is at risk—they’ll stay quiet. Safe. Predictable.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">By that logic, I should’ve turned out exactly like them.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">But I didn’t.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">I’m the polar opposite. I question <i>everything</i>. I overthink <i>everything</i>.<br> Why? Probably because I surrounded myself with… <i>no one</i>.<br> No friends. Just books. YouTube. My own thoughts. Isolation breeds introspection.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">This needs to be studied more, honestly. I can’t draw conclusions from just one case. But if I had to bet—I'd say rebels are born this way. I was fed the same ideas as everyone else. But something in me rejected them all.</span></p> <p class="text-hover-scale MsoNormal" style="text-align: center;"><span style="font-size: 18pt; mso-bidi-font-size: 16.0pt;">And here I am.</span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEip3ZrMKuCmNmLRWzLwAjWcdLb-6hiRkqvXgzy9MVw1EOK1gl6vbfLoDZAXikzJnWMwfrE-yt1HTccVetYPRXeFUYXGH4NTSDxGDpKmVzbu0K6Pm0QOsPwsQ_J7ME3aiYOeSwpW7LLTNGU3aq4nP4qF8F7_BndRE74cWz1P2a11dY-1_byeX_ubO-hhV1U/s1600/For%20yt%20music.jpg" alt="For yt music" width="303" height="303"> </div>
+                    <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                <!-- Article 3: post-8246180062320707624 -->
+                <article id="post-8246180062320707624">
+                     <!-- Removed top back button -->
+                    <h2 class="text-hover-scale">[POST] A New Chapter</h2>
+                    <div class="post-meta-info">Published: February 14, 2025</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Nunito; font-size: x-large;"> It's been so long that we have written anything and so much has happened and I don't mean to provide like a storytelling effect or something but really so much has happened. I discovered myself, I discovered that I was an asexual and personally I am disgusted by sex and anything related to that particular activity. This was a discovery that I made at around December, yeah, and I have only ever been more so confirmed of the fact that I am an asexual. So there's that and I didn't write anything particular during the interval that I was gone but I surely picked up some books which I've been reading and I'll share the image. I ordered them last month and they arrived last month only but I've begun reading them right now.<br><br>Sometimes I think I should start writing songs instead of writing poems. Maybe. We'll see. I am in the mood. I am starting to prepare for IPMAT And JIPMAT. I have been preparing, I'll say. Just because of the fact that I am surrounded by literal idiots. And I cannot endure any more of all this stupidity that I have endured so far. I need a break from all this. I need a better crowd around me. I need a better surrounding. That's why I have decided my past failure does not define who I am. And I'll be working hard to achieve this particular goal of mine. Because I only have like two months, to be frank with you. And this realization, although it came very late, I am glad that it did. And let's see what happens. I will try to write some blog posts or poems in between if I get the chance or the time to do so. Until then, I am not sure, but let's see.<br><br>There was this very fascinating, at least to me, a problem which I was stuck with up until now. This thought process of mine, which I'll summarize. Like all these past experiences which I unconsciously assume are of failure that plagued my mind, I don't know how to get over them or why haven't I internalized the fact that failure is just a part of the journey and not something to cling on to. What I realized over time or I realized like past few weeks is the fact that I am currently stuck in something totally stupid. I do realize that I don't like the crowd around me, yes. And the fact that I am clinging on to my so-called failures only to never try again is blatantly stupid. That is what I have been doing for the past few months, no not few months, for past an year or so. No one just gives up like that and I am only 19. This cannot be the way of life from now on. Like this cannot be my way of life for like ever in my life. This is just not me. I might be surrounded by idiots but I am not one. And just giving up on everything, passing your whole days doing worthless shit is just utterly idiotic and stupid. And if there is one thing I am totally sure of is that I am not stupid. I am smarter than the average and if so then I should act like one too.<br><br>I also realized one more thing. That depression, at least the one that I had, or my depression, is blatantly stupid. It was for me, at least. If you follow everything logically and just spend time with yourself and, you know, journal everything out like I did, and try to uncover the secrets of your thought process, I'll say, you might never get depressed. At least, this was the case with me.<br><br>Yesterday, out of nowhere, I just gave a mock of JIPMAT, and I scored around 110, which is surprising to be honest. I had zero to little preparation. I haven't even picked up a book related to academics in like 9 or 10 months, and I was able to score 110. I obviously scored the most in verbal ability and reading comprehension. That is one thing I'm pretty sure I'll need less preparation time for. The worst I did was in quant or mathematics, because obviously you need preparation for that. This is just fascinating to me, being able to score such marks without any preparation. That got me thinking of what would happen if I tried.</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Nunito; font-size: x-large;"><br>I tried to read all the books that arrived yesterday, and there is one book that hasn't arrived yet, that being 101 essays, that will change the way that you think. White Nights, I found a little confusing. The narration and the vocab isn't really friendly at all. God Delusion is pretty great, and I'm pretty sure that I'll be reading it cover to cover, and it's something that I'll live my life by. The most fun I've had was with Read People Like A Myth by Patrick King. It is pretty easy to understand, and I'm just a very big fan of human psychology, because you know, it helps me understand myself better, and the people around me even better. And I did learn many things halfway through chapter one, that I'm pretty sure I'll be writing a post on. So I guess I'll be looking forward to that.</span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi-614uevCf62lPJLFYD1qEkMPsFCNPS0fzPIFMD8NeDq6_lMC-2u8vaWOnI1dBjfiWvjw7Oxs7GUROW1FhcmoJaVecu-9sPdySvAFM3bWPJJWMlOATj3Kq0Q87ZMjp_4INUhjU_N0ri3WN1RyBn_8ulyGyd-ZVOpBxny2pXzUx_ixV95Fif7Snl-GzFR4/s320/WhatsApp%20Image%202025-02-14%20at%2019.45.21_fccd094f.jpg" alt="Books" width="320" height="240"> </div>
+                     <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                 <!-- Article 4: post-6388410560920980765 -->
+                <article id="post-6388410560920980765">
+                     <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POEM] Time Flies By</h2>
+                     <div class="post-meta-info">Published: November 28, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;"> Time flies by <br> For me it does so in gloom<br> Worries of the future <br> Regrets of the past </span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;"> Time flies by <br> With the tick of the clocks <br> An infinite race <br> With no finish line to cross</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Time flies by <br> It lingers , it haunts <br> Summer's chill , winter's warmth<br> A fleeting act of taunts</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Time flies by <br> As I sit through my thoughts <br> Both of the cruel and kind <br> Unable to fill the void in my life's mere plot</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Time flies by <br> In it's flight , I write <br> Words to compose myself <br> For the life I hope to strive.<br></span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgNVPwNLxMOdn2D14BgTZDddUpYhGLLicnwmoldpUmtYOYjYRuXENV3Q1Mx9ZEuVDI-aPGbbvBJNwSYNoGQofnCuTnBhoZGYoqKiXvixDN8vfwPQ-sP8yW1NC51vtUyJasuMUl-YJP-8DYCq4insJ6O8R8Z2CrBbwBQPrzka5oczanVGCMRFjpdeWqAH40/s320/AG%20solid%20.png" alt="AG Solid Logo" width="292" height="320"> </div>
+                      <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                 <!-- Article 5: post-2406648289663441748 -->
+                 <article id="post-2406648289663441748">
+                      <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POST] Reading</h2>
+                     <div class="post-meta-info">Published: November 16, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span> I was thinking about the way I like to read , I read 3 different kinds of books at the same time.</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>One book must be thought provoking , that instills ideas , makes u question ur absolute thoughts , One I'm reading right now is Metamorphosis <br></span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>One book must be fictional , just a good story that is enjoyable so when If ever I feel like not reading I can pick that one up , one I'm reading right now is Project Hail Mary  </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>One book should be non fiction , the bill gates type lol , One I am reading rn is How The World Really Works </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>Personally the one's I love the most are stories that teach something valuable or at least makes me question everything I ever believed in.</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>For eg. I would always pick up Kafka over Project Hail Mary </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I thoroughly enjoyed Sapiens on my first read cuz it checks all the boxes for me even though It is surrounded with controversy and false predictions but everything is composed so well just what I expect in a good book.</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>If a book doesn't change u even in the slightest way possible , It isn't worth reading.</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>maybe it made u question everything </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>maybe it made u conscious about ur daily activities</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>maybe it motivated u enough to finally clean ur  dishes idk </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>but even the slightest change a book brings to ur life is worth the effort and time taken </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>No book is ever bad by nature </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I have mostly picked good books , well Is a book good or bad is subjective by nature and by that standard I have only once I like to think have picked a bad book</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>The Autobiography Of A Yogi</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>What a total bogus pseudoscience of a book </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I don't like to believe in stuff without proof that is all I'll say about this purchase</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I bought that when I was 16 mis-influenced  by an ass of a youtuber (Ranveer allahbadia lol ik ik how could I of all people) </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I was not on par with my critical thinking skills at the time as much as I am now <br></span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>I just hope not to repeat such mistakes in future but who's to say</span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>Even if I make such a mistake I guess that would what make me human after all </span></span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Fuzzy Bubbles; font-size: large;"><span>A win over the machines in my book lol.</span></span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg5CNqTVaUEvB_avLWm2JqLJeAFFaVmIWI5-TE219Ik8nSXvV6kTOMs4boMRhrYsl7zsXH_ihbSYtawhVGv2gHWZ_BCfeMvTW8-iGvCtFmiON9-c8bJSUoRM8FRtDDq9UoHkqoh3uni_udrZ8jwolDh2cHqb7sIS6ExkuMsfPRToWC8rMIy493NAsg1Pbo/s320/A%20just%20A.png" alt="A just A logo" width="217" height="320"> </div>
+                      <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                 <!-- Article 6: post-7505116423602657742 -->
+                <article id="post-7505116423602657742">
+                     <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POEM] The Lad I Use To Be -</h2>
+                     <div class="post-meta-info">Published: November 10, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">"So glad I wrote it down <br> Of what became of me <br> Now I smile at what made me frown <br> Oh what a lad I used to be<br><br> In search for all these years <br> Of where my true self was lost<br> Now I hold back all these tears <br> Oh he was never even mine to call cost<br><br> Though the past was etched in sorrow<br> A lesson it did teach <br> Cherish that is left hoping for a better tomorrow <br> To forget all the cleft and battles out of my reach" </span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj3PX0HVCB2xFHSWpxAYRQQCj5xUGKkkROphuLWj4l1HaVDmRjM5hsY2R-uEM0E7Ekg5sWD-NaHbADAPxbeX3PUtAbCrqFVQ436UuSo4ZnHB7hUf3A4mMfI7q2WC-_kDT5qJ4pYjfM-TsZetjFiTToSEOu64HRFFvxmFXWHKVKCc0MP6RK7KJzV8hru0WY/s320/AGRAJ.png" alt="AGRAJ Logo" width="320" height="225"> </div>
+                      <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                 <!-- Article 7: post-5851706812396763606 -->
+                <article id="post-5851706812396763606">
+                     <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POEM] Winter Is Warm -</h2>
+                     <div class="post-meta-info">Published: November 10, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">"The only season with so much warmth</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Whispers of wind , a shiver so forth</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Bringing us close , holding love and affection</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Mornings so lazy , yet so cozy and full of perfection</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Heart races through love  , so it does by the breeze</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Sparks a change , a moment to seize</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">Fills me with drive , softly it fades</span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">As January bows to February's warm shades"  </span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiYlcKQRCbefgXJ8P6ZgZGh3Tu8fTevOf3h-TX_GV2d5Ak5rND5HCdD3C4jbdHKmnmw7gJM9j2iCL5QpbgLAc7I3SuBkBKDARoOWLZ7qPDemc-AnChB4erwtHCnKibMlC6Ujkag115g3_YU8XvX55E3Rur4eW-a65wiAj8V2uAUlb5bnIJ5ik7NWLSsMb4/s320/agraj%20doops.png" alt="Agraj Doops Logo" width="320" height="311"> </div>
+                     <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                <!-- Article 8: post-2503258102193667996 -->
+                <article id="post-2503258102193667996">
+                    <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POEM] Sinnloses leben (Meaning Worthless Life) -</h2>
+                     <div class="post-meta-info">Published: November 10, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">"As a kid I used to dream <br> Of all things mighty and high <br> Of things way beyond my reach <br> To fly way above the sky<br> That I'd grew up to be the greatest alive <br> To conquer all that is hidden from sight <br><br> But the first lesson life did ever teach <br> Was to abandon all hope and dream <br> And to start the chase <br> For all that life really is ; a mere race <br> Pick up the pace for u know nothing <br> Destined to lose fore' u even took a swing<br><br> All they deemed it as right and I ran along <br> Thought their certainty couldn't be wrong <br> So I ran and ran and ran all along <br> Opting for the road and all that is unseen <br> Maybe this is what life's supposed to Mean <br><br> Time passed by without a snooze <br> All along this way <br> Never had what I set out to choose <br> But better yet I never tried <br> To seek myself , to find my true stride <br><br> For the time will run out and u will never be told <br> That the World might shift beyond ur Leech <br> Within yourself though , u will always find ur true self to reach<br><br> Life's come full circle now only for me to see -<br> All went away for nothing and all I am now is who I was never supposed to be"</span><br></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhzj5Vpesm9vlwHzlIdu_oyhG0y68e_7jlHNiwl6AuxOE92kqWiZp_mPguv0AacsWV02Vu5tP-yFtqJlYwygR2-HArMzpUXvJYlh4hN6IGx5PBzo6lRABwXaLgRrMyCX0-VGqXtoLMsINsWT7HPh3Mz9GVU9FflT1gGHYJivOLMHOjuQF4A5a_EXxYBEJI/s320/Ag%20logo%20dope.png" alt="Ag Logo Dope" width="320" height="319"> </div>
+                      <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                <!-- Article 9: post-9063719817694048941 -->
+                 <article id="post-9063719817694048941">
+                      <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">[POEM] Fragmented Void -</h2>
+                     <div class="post-meta-info">Published: November 10, 2024</div>
+                     <div class="post-content-html"> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;">"Would love to cry my heart out at the moment <br> But I can't <br> I can't do it without you <br> I am not strong enough to keep livin up<br> Without you </span></p> <p class="text-hover-scale" style="text-align: center;"><span style="font-family: Outfit; font-size: large;"><br> Lost <br> Just like I lost all my hope<br> Where are you and I need you the most <br><br> Dreadness <br> Dead from inside <br> Without you by my side <br> Got no way to run but all my feelings to hide <br><br> Darkness <br> What's the point keeping them eyes open<br> Closed I see heaven breathin<br> Seepin it's way through <br> Calling me out <br> Shouting my name <br> Where I really belong <br> Other than your warmth and embrace <br><br> Suicide <br> You decide <br> If I should ever let go this worthless life of mine<br> Without you this life isn't worth my time <br><br> Hopeful<br> We will be together forever <br> When I meet you in the next life <br> It is worth pulling the trigger <br> It is worth seeking you out <br> If I can't have you <br> Then I don't wanna have myself"</span></p> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiVr6_8eP53sT-VQ7GTC3i8qx78tODthWW93zOBHpeq_xcooJ32sW_Iwl-1T5hSStxx-oOXNA2Hy7R7JLva1z1d0DxxPlnX9z6Q4vFfiYI2pY8-3pZvpd_Z6cS2g5gr_mcYmr_vQtu6V3vPZ2eKzR-Ml_ltZm7r2fbJr9a9OR6maqfZf4cCquk-EPz37L8/w320-h184/agraj%20lowercase%20wonder.png" alt="Agraj Lowercase Wonder Logo" width="320" height="184"> </div>
+                     <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+                 <!-- Article 10: post-5585996557335817138 -->
+                 <article id="post-5585996557335817138">
+                     <!-- Removed top back button -->
+                     <h2 class="text-hover-scale">THE FOUR BURNER THEORY -</h2>
+                     <div class="post-meta-info">Published: November 4, 2020</div>
+                     <div class="post-content-html"> <blockquote class="text-hover-scale"><p style="text-align: center;"> <b style="font-family: verdana; font-size: large;">FOUR BURNER THEORY</b></p></blockquote> <blockquote class="text-hover-scale"><blockquote><span style="font-size: medium;"><b><span style="font-family: verdana;">IMAGINE FOUR BURNERS WITH A LIMITED AMOUNT OF FUEL LEFT EACH BURNER IDICATE BASIC NECESSITY OF YOUR LIFE . THE FIRST BURNER<u>      </u> SHOWS HEALTH . THE SECOND ONE SHOWS WORK . THE THIRD ONE SHOWS FAMILY AND THE LAST ONE SHOWS SOCIAL (MEANS YOUR FRIENDS , NEIGHBOURS ETC. ) AS THE BURNER ONLY HAVE LIMITED FUEL THE BURNERS ARE BURNING EQUALLY THAT MEANS YOU ARE GIVING EQUAL TIME TO EVERYONE TO YOUR FRIENDS , FAMILY , WORK , HEALTH .THIS TYPE OFLIFE IS LIVED BY AN UNSUCCESSFUL ONE AN AVERAGE PERSON, WHO IS GIVING EQUAL AMOUNT OF FUEL TO EACH BURNER. </span></b></span></blockquote></blockquote> <blockquote class="text-hover-scale"><blockquote><span style="font-size: medium;"><b><span style="font-family: verdana;">   IF YOU WANT TO BE<span style="color: #2b00fe;"> SUCCESSFUL</span> THEN YOU HAVE TO CUT DOWN ANY ONE BURNER TOTALLY FROM YOUR LIFE IT COULD BE ANY BURNER EXCEPT FOR WORK (IT'S OBVIOUS HOW COULD YOU BE SUCCESFUL IF YOU DON'T PAY ATTENTION TO YOUR WORK??) AND IF YOU WANT <span style="color: #2b00fe;">SUCCESS</span> IN AN EXTREME WAY THEN YOU SHOULD CUT DOWN TWO BURNERS TOTALLY FROM YOUR LIFE THEN ONLY YOU COULD ACHIEVE <span style="color: #2b00fe;">SUCCESS</span> IN A GREAT WAY LIKE OTHER <span style="color: #2b00fe;">SUCCESSFUL PEOPLE</span> FOR EG. ELON MUSK , STEVE JOBS ETC. ANALYSE THIER LIFE YOU WILL FOUND THE SAME THING THAT THEY HAVE CUT ANY TWO BURNERS COMPLETELY FROM THIE LIFE . </span></b></span></blockquote></blockquote> <blockquote class="text-hover-scale"><blockquote><span style="color: #ffa400;"><b>THANKS FOR GIVING ME YOUR PRECIOUS TIME / HOPE YOU FOUND THIS BLOG KNOWLEDEGABLE IF YOU WANT TO KNOW MORE CLICK <a href="https://www.youtube.com/watch?v=sJoR4Hjs3VE" target="_blank" rel="noopener noreferrer">HERE</a> !!!✌✌</b></span></blockquote></blockquote> <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjx_WPTaWLn8ZzXr4TvuG4pk2DmNYaw3u3AO_2CUavNWy_60gZFCHL5dJmm3o9nL32wHPuqj2LCj0ZT3VsuUxOut-i-VxiZNZXZBYU0mU4_srMB8rYg2BOnF-JNhjDPFJmnriildL_zu-g/s320/86ff94_23a29dae31e9478caeedebcc634e9c6c_mv2.png" alt="Four Burner Theory Diagram" width="320"> </div>
+                      <button class="back-button mt-8">← Back to Writings</button>
+                </article>
+
+            </div><!-- end full-articles-content -->
+        </section>
+        <!-- ==== End Full Articles Section ==== -->
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-t from-gray-900/70 to-black text-center py-10 mt-20 relative z-10">
+        <p class="text-brand-text text-base">© <span id="year"></span> Agraj Dubey. All rights reserved.</p>
+    </footer>
+
+     <!-- Scripts (Readable Version - JS Logic unchanged) -->
+     <script>
+        // --- Mobile Nav Toggle JS ---
+         const navToggle = document.getElementById('nav-toggle');
+         const mobileMenu = document.getElementById('mobile-menu');
+         if (navToggle && mobileMenu) {
+             navToggle.addEventListener('click', () => { mobileMenu.classList.toggle('is-open'); });
+             mobileMenu.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { mobileMenu.classList.remove('is-open'); }); });
+             document.addEventListener('click', (event) => { const isClickInsideMenu = mobileMenu.contains(event.target); const isClickOnToggle = navToggle.contains(event.target); if (!isClickInsideMenu && !isClickOnToggle && mobileMenu.classList.contains('is-open')) { mobileMenu.classList.remove('is-open'); } });
+         }
+
+        // --- Writings Page Interaction Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const gridContainer = document.getElementById('writings-grid-container');
+            const fullArticlesContainer = document.getElementById('full-articles-container');
+            const readMoreLinks = document.querySelectorAll('.read-more-link');
+            const backButtons = document.querySelectorAll('.back-button');
+            const allFullArticles = fullArticlesContainer ? fullArticlesContainer.querySelectorAll('article') : [];
+            // const mainHeading = document.querySelector('main > h1'); // Heading is removed
+            const separator = document.querySelector('hr.separator');
+
+            function showArticle(targetId, skipScroll = false) {
+                // Removed check for mainHeading
+                if (!gridContainer || !fullArticlesContainer || !separator) {
+                    console.error("Required elements not found for showArticle"); return;
+                }
+                gridContainer.style.display = 'none';
+                // mainHeading.style.display = 'none'; // Removed line
+                separator.style.display = 'none';
+                allFullArticles.forEach(article => { article.classList.remove('is-visible'); article.style.display = 'none'; });
+                const targetArticle = document.getElementById(targetId);
+                if (targetArticle) {
+                    fullArticlesContainer.style.display = 'block'; targetArticle.style.display = 'block';
+                    setTimeout(() => { targetArticle.classList.add('is-visible'); }, 10);
+                    if (!skipScroll) { setTimeout(() => { fullArticlesContainer.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); }
+                } else { console.error(`Article with ID ${targetId} not found.`); showGrid(); }
+            }
+
+            function showGrid() {
+                 // Removed check for mainHeading
+                 if (!gridContainer || !fullArticlesContainer || !separator) {
+                     console.error("Required elements not found for showGrid"); return;
+                 }
+                allFullArticles.forEach(article => { article.classList.remove('is-visible'); article.style.display = 'none'; });
+                fullArticlesContainer.style.display = 'none';
+                // mainHeading.style.display = 'block'; // Removed line
+                separator.style.display = 'block';
+                gridContainer.style.display = 'grid';
+                 const gridElement = document.getElementById('writings-grid-container');
+                 if(gridElement) { setTimeout(() => { gridElement.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50); }
+                 else { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+            }
+
+            readMoreLinks.forEach(link => { link.addEventListener('click', (event) => { const targetId = event.currentTarget.getAttribute('data-target-id'); if (targetId) { showArticle(targetId); } else { console.error("Read more link clicked, but no data-target-id found."); } }); });
+            backButtons.forEach(button => { button.addEventListener('click', () => { showGrid(); }); });
+            if (window.location.hash && window.location.hash.startsWith('#post-')) { const targetIdFromHash = window.location.hash.substring(1); setTimeout(() => { showArticle(targetIdFromHash, true); }, 200); }
+
+            // Add text-hover-scale class dynamically
+             const contentDivs = document.querySelectorAll('.post-content-html');
+             contentDivs.forEach(div => {
+                 const blockElements = div.querySelectorAll(':scope > p, :scope > div, :scope > blockquote');
+                 blockElements.forEach(el => { if (!el.querySelector(':scope > img:only-child')) { el.classList.add('text-hover-scale'); } });
+             });
+        });
+        // Set current year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+
+</body>
+</html>
